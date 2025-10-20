@@ -44,6 +44,7 @@ abstract class AbstractBuilderGenerator implements BuilderGenerator {
     private final TypeElement targetClassType;
     private final List<? extends VariableElement> attributes;
     private final Builder builderAnnotation;
+    protected final boolean generateGetters;
     private final ExecutableElement targetCreationMethod;
 
     private final String builderClassPackage;
@@ -60,6 +61,7 @@ abstract class AbstractBuilderGenerator implements BuilderGenerator {
         this.targetClassType = targetClass;
         this.attributes = attributes;
         this.builderAnnotation = builderAnnotation;
+        this.generateGetters = builderAnnotation.generateGetters();
         this.targetCreationMethod = targetCreationMethod;
 
         this.builderClassPackage = this.initBuilderClassPackage();
@@ -495,6 +497,12 @@ abstract class AbstractBuilderGenerator implements BuilderGenerator {
         // so check if the creation method's simple name is "<init>",
         // which is what constructors are called in bytecode
         return "<init>".equals(this.targetCreationMethod.getSimpleName().toString());
+    }
+
+    protected final String getterMethodName(VariableElement attribute) {
+        String attributeSimpleName = attributeSimpleName(attribute);
+        String prefix = attribute.asType().getKind() == TypeKind.BOOLEAN ? "is" : "get";
+        return prefix + Utils.capitalize(attributeSimpleName);
     }
 
     protected final String setterMethodName(VariableElement attribute) {

@@ -329,6 +329,23 @@ public @interface Builder {
     String toBuilder() default "";
 
     /**
+     * If set to {@code true}, the generated Builder class will have
+     * public 'get' methods for each of the properties.
+     * <p>
+     * This is useful in cases where one of the properties is a collection,
+     * and you want to add elements to it, instead of replacing it
+     * with a new collection instance.
+     * <p>
+     * This attribute is only applicable to the {@link BuilderStyle#CLASSIC}
+     * Builder style, and will be ignored for all other styles.
+     * <p>
+     * This is an optional attribute - the default is {@code false}.
+     *
+     * @since 1.9
+     */
+    boolean generateGetters() default false;
+
+    /**
      * Annotation that ignores the given field of a class when generating a Builder for that class.
      * Used when {@link Builder} is placed on the class being built itself.
      *
